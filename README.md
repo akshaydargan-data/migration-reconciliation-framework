@@ -1,136 +1,82 @@
-\# Automated Data Warehouse Migration Reconciliation Framework
+\# Data Warehouse Migration Reconciliation
 
 
 
-A SQL- and dbt-based framework for validating data consistency during warehouse migrations.
+A project for automating source vs. target validation during a warehouse migration.
 
 
 
-This project was inspired by a real BigQuery-to-Snowflake migration validation problem I encountered professionally. In that work, I validated equivalent outputs across the two warehouses using aggregate SQL queries and manual Excel-based reconciliation. That process worked, but it was difficult to scale across many datasets and validation checks.
+This project was inspired by a BigQuery-to-Snowflake migration validation project I undertook professionally. At that time, I used SQL to aggregate equivalent data in each warehouse and manually reconciled the results in Excel. I built this project to explore how that process could be made more repeatable and scalable.
 
 
 
-I built this project to explore how that workflow could be made more systematic and automated using dbt and Snowflake.
+\## How It Works
 
 
 
-\## What the Project Does
+For each dataset, the workflow is:
 
 
 
-The framework compares source and target datasets representing a warehouse migration.
+1\. Stage source and target data in Snowflake.
 
+2\. Use dbt models to calculate equivalent business metrics.
 
+3\. Reconcile source vs. target results at defined business grains.
 
-For each dataset it:
+4\. Run quality checks for issues such as duplicates and null values.
 
+5\. Produce a unified PASS/FAIL reconciliation report.
 
+6\. Store results in Snowflake with run timestamps for historical tracking.
 
-1\. Loads source and target data into Snowflake.
 
-2\. Standardizes the data through staging models.
 
-3\. Calculates and compares business-level aggregates.
+A YAML configuration identifies the datasets to process and a Python runner orchestrates the dbt workflow.
 
-4\. Reconciles source vs. target results.
 
-5\. Flags discrepancies as PASS or FAIL.
 
-6\. Uses dbt data tests to identify dataset-level quality problems.
+\## Example Datasets
 
 
 
-The target data intentionally contains defects so that the validation logic can demonstrate how different issues are detected.
+\*\*Orders\*\* — reconciles order counts, quantities, and revenue by date and channel.
 
 
 
-\## Current Architecture
+\*\*Customers\*\* — reconciles customer counts and lifetime value by region and customer status.
 
 
 
-```text
+Defects are intentionally included in the datasets to demonstrate detection of issues such as missing records, duplicates, null values, and metric discrepancies.
 
-Synthetic Source / Target Data
 
-&#x20;           |
 
-&#x20;        dbt seeds
+\## Technology
 
-&#x20;           |
 
-&#x20;      Staging Models
 
-&#x20;           |
+SQL · dbt · Snowflake · Python · YAML
 
-&#x20;  Intermediate Summaries
 
-&#x20;           |
 
-&#x20;  Reconciliation Models
+\## Run
 
-&#x20;           |
 
-&#x20;      PASS / FAIL
 
+From the project root:
 
 
-\## Orders Reconciliation
 
+```powershell
 
+python run\_reconciliation.py
 
-The orders dataset contains 5,000 source records. The target dataset includes defects such as:
+```
 
 
 
-\- Missing records
+The command runs the pipelines, displays the validation report in the terminal, and saves the results to Snowflake for historical tracking.
 
-\- Duplicate records
 
-\- Null dimension values
-
-\- Revenue discrepancies
-
-\- Product mismatches
-
-
-
-The reconciliation compares source and target results at the `order\_date + channel` level using:
-
-
-
-\- Order count
-
-\- Quantity
-
-\- Revenue
-
-
-
-\## Customers Reconciliation
-
-
-
-The customers dataset contains 2,000 source records. The target dataset includes defects such as:
-
-
-
-\- Missing customers
-
-\- Duplicate records
-
-\- Null regions
-
-\- Customer status changes
-
-\- Lifetime-value discrepancies
-
-
-
-The reconciliation compares source and target results at the `region + customer\_status` level using:
-
-
-
-\- Customer count
-
-\- Total lifetime value
 
