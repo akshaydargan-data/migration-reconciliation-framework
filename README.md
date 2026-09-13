@@ -78,5 +78,3 @@ python run\_reconciliation.py
 
 The command runs the pipelines, displays the validation report in the terminal, and saves the results to Snowflake for historical tracking.
 
-
-
