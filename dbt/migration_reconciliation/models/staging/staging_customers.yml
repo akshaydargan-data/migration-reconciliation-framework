@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: stg_source_customers
+    columns:
+      - name: customer_id
+        data_tests:
+          - not_null
+          - unique
+
+      - name: region
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['northeast', 'south', 'midwest', 'west']
+
+      - name: customer_status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['active', 'inactive', 'churned']
+
+  - name: stg_target_customers
+    columns:
+      - name: customer_id
+        data_tests:
+          - not_null
+          - unique
+
+      - name: region
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['northeast', 'south', 'midwest', 'west']
+
+      - name: customer_status
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['active', 'inactive', 'churned']

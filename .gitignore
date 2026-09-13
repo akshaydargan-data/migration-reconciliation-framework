@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+output/*
+!.gitkeep
+dbt/migration_reconciliation/target/
+dbt_packages/
+logs/
+rsa_key.p8

@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: stg_source_orders
+    columns:
+      - name: order_id
+        data_tests:
+          - not_null
+          - unique
+
+      - name: channel
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['web', 'phone', 'store']
+
+  - name: stg_target_orders
+    columns:
+      - name: order_id
+        data_tests:
+          - not_null
+          - unique
+
+      - name: channel
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['web', 'phone', 'store']

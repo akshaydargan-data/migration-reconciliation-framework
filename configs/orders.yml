@@ -1,0 +1,28 @@
+dataset: orders
+
+source:
+  path: sample_data/source/orders.csv
+
+target:
+  path: sample_data/target/orders.csv
+
+keys:
+  - order_id
+
+dimensions:
+  - order_date
+  - channel
+
+metrics:
+  - quantity
+  - revenue
+
+checks:
+  - row_count
+  - duplicates
+  - nulls
+  - aggregate_match
+
+tolerances:
+  revenue: 0.01
+  quantity: 0
