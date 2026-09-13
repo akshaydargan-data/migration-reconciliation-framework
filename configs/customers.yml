@@ -1,0 +1,26 @@
+dataset: customers
+
+source:
+  path: sample_data/source/customers.csv
+
+target:
+  path: sample_data/target/customers.csv
+
+keys:
+  - customer_id
+
+dimensions:
+  - region
+  - customer_status
+
+metrics:
+  - lifetime_value
+
+checks:
+  - row_count
+  - duplicates
+  - nulls
+  - aggregate_match
+
+tolerances:
+  lifetime_value: 0.01
